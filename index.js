@@ -2,7 +2,7 @@ const express=require('express'); //importamos la libreria
 
 
 const app=express()//instanciando una aplicacion tipo express
-
+app.use(express.json());
 //req: request
 //res: response
 app.get("/",(req, res)=>{
@@ -61,19 +61,20 @@ app.put("/usuarios/actualizar/:id",(req,res)=>{
     const id=parseInt(req.params.id);
     //buscar
     const usuario=usuarios.find(u=>u.id===id);
-    if(!usuario,!email){
+    if(!usuario || !email){
         res.status(404).json({
-            mensaje:"Usuario y correo a modificar no encontrado"
+            mensaje:"Usuario y/o correo a modificar no encontrado"
         })
     }
-    const infoAnterior=usuario.nombre;
+    const infoAnterior = usuario.nombre;
     usuario.nombre=nombre;
 
     const emailanterior=usuario.email;
     usuario.email=email;
+
     res.status(202).json({
-        mensaje:"Usuario y correo modificados correctamente",
-        infoAnterior:infoAnterior,
+        mensaje:"Usuario y/o correo modificados correctamente",
+        infoAnterior,emailanterior,
         infoNueva:usuario
     })
 
@@ -82,7 +83,24 @@ app.put("/usuarios/actualizar/:id",(req,res)=>{
 })
 
 
-
+//DELETE
+app.delete("/usuarios/eliminar/:id",(req,res)=>{
+//capturar el id pasado por parametros
+const id=parseInt(req.params.id);
+// encontrar el indice correspondiente
+const index=usuarios.findIndex(user=>user.id===id)
+//elimianr de la lista la info del indice encontrado
+if(index===-1){
+    res.status(404).json({
+        mensaje:`Usuario con id ${id} no encontrado`
+})
+    return;
+}
+    usuarios.splice(index)
+    res.status(200).json({
+    mensaje:`Usuario con id ${id} eliminado correctamente`
+})
+})
 
 
 
