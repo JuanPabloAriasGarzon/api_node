@@ -1,7 +1,7 @@
 const express=require('express'); //importamos la libreria
 require("dotenv").config(); //esto carga las variables de entorno
 const sequelize=require("./config/database")
-const router =require('./routes/UsuarioRoute')
+const router =require('./routes/UsuarioRoute') // Todos los endpoints del usuario
 
 
 
@@ -10,7 +10,7 @@ const port=process.env.PORT
 app.use(express.json());
 
 
-app.use('/',router);
+app.use('/',router); // use todos los endpoints del usuario
 
 //sequelize sincorniza la base de  datos  con el proyecto
 sequelize.sync().then(()=>{
