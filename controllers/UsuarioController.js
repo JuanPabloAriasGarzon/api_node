@@ -1,19 +1,27 @@
 const Usuario=require('../models/Usuario');
 
 exports.obtenerUsuarios= async(req, res)=>{
+    try{
     const usuarios = await Usuario.findAll();
-    res.json(usuarios);
+    return res.json(usuarios);
+    }catch(error){
+    return res.json(error);
+    }
 }
 
 exports.obtenerUsuariosporid= async(req,res)=>{
-    const id=parseInt(req.params.id);
+    try{
+const id=parseInt(req.params.id);
     const usuario= await Usuario.findByPk(id);//si existe el usuario
     if(!usuario){
-        res.status(404).json({
+        return res.status(400).json({
             mensaje:"Usuario no encontrado"
         })
-    }
+}
     res.json(usuario) //si encuentra el usuario en la BD entregue lso datos
+}catch{
+    return res.status(401).json({mensaje: error.message})
+}
 }
 
 exports.crearUsuarios= async(req,res)=>{
